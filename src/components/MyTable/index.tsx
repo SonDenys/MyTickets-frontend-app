@@ -19,6 +19,9 @@
 //   },
 // ];
 
+import { useState } from "react";
+import MyModal from "../MyModal";
+
 export interface MyTableUsers {
   ticketName: string;
   name: string;
@@ -35,14 +38,26 @@ export interface MyTableUsersProps {
   tabs: MyTableUsers[];
   onClick?: any;
   button_text?: string;
+  button_text1?: string;
+  button_text2?: string;
   display_avatar: boolean;
   display_email: boolean;
   display_status: boolean;
-  display_role: boolean;
+  display_action: boolean;
   //   display_button: boolean;
 }
 
 const MyTable = (props: MyTableUsersProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -70,7 +85,16 @@ const MyTable = (props: MyTableUsersProps) => {
                     Comment
                   </th>
 
-                  {props.display_role && (
+                  {props.display_status && (
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:inline-grid"
+                    >
+                      Status
+                    </th>
+                  )}
+
+                  {props.display_action && (
                     <th
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:inline-grid"
@@ -135,23 +159,13 @@ const MyTable = (props: MyTableUsersProps) => {
                       </td>
                     </div>
 
-                    {/* {props.display_role && (
-                      <div className="hidden sm:inline-grid">
-                        {item.role && (
-                          <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
-                            {item.role}
-                          </td>
-                        )}
-                      </div>
-                    )} */}
-
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
                         {item.comment}
                       </div>
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className=" py-4 whitespace-nowrap">
                       {props.display_status && (
                         <td className="px-6 py-4 whitespace-nowrap hidden sm:inline-grid">
                           {item.active && (
@@ -168,13 +182,24 @@ const MyTable = (props: MyTableUsersProps) => {
                       )}
 
                       {props.button_text && (
-                        <td className=" py-4 whitespace-nowrap text-right text-sm font-medium hidden sm:inline-grid">
-                          <a
+                        <td className=" cursor-pointer px-6 py-4 whitespace-nowrap text-right text-sm font-medium hidden sm:inline-grid">
+                          <button
                             onClick={props.onClick}
                             className="text-indigo-600 hover:text-indigo-900"
                           >
                             {props.button_text}
-                          </a>
+                          </button>
+                        </td>
+                      )}
+
+                      {props.button_text1 && (
+                        <td className=" cursor-pointer px-6 py-4 whitespace-nowrap text-right text-sm font-medium hidden sm:inline-grid">
+                          <button
+                            onClick={props.onClick}
+                            className="text-indigo-600 hover:text-indigo-900"
+                          >
+                            {props.button_text1}
+                          </button>
                         </td>
                       )}
                     </td>
@@ -183,6 +208,31 @@ const MyTable = (props: MyTableUsersProps) => {
               </tbody>
             </table>
           </div>
+          <div className="mt-12 flex justify-center">
+            <button
+              type="button"
+              onClick={openModal}
+              className="inline-flex px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-indigo -700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              {props.button_text2}
+            </button>
+          </div>
+          {/* If modal opended */}
+          {isOpen ? (
+            <MyModal
+              text1="Create a ticket"
+              heightScreen="h-full"
+              widthFull="max-w-screen"
+              buttonX={true}
+              buttonX_close={() => closeModal()}
+              field={true}
+              field1={true}
+              button1_text="Create"
+              button2_text="Cancel"
+            />
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

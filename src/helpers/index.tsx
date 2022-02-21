@@ -5,12 +5,6 @@ import { BACKEND_URL } from "../params";
 import { useNavigate } from "react-router-dom";
 
 export async function signup({ email, password }) {
-  const body = {
-    data: {
-      email,
-      password,
-    },
-  };
   try {
     const response = await axios.post(`${BACKEND_URL}/user/signup`, {
       email,
@@ -25,20 +19,11 @@ export async function signup({ email, password }) {
 }
 
 export async function login({ email, password }) {
-  const body = {
-    data: {
+  try {
+    const response = await axios.post(`${BACKEND_URL}/user/login`, {
       email,
       password,
-    },
-  };
-  try {
-    const response = await axios.post(
-      `https://mytroopers-app.herokuapp.com/user/login`,
-      {
-        email,
-        password,
-      }
-    );
+    });
     if (response && response.data) {
       return response.data;
     }
@@ -63,23 +48,12 @@ export async function get_tickets() {
 }
 
 export async function create_tickets({ name, comment }) {
-  const body = {
-    data: {
+  try {
+    const response = await axios.post(`${BACKEND_URL}/user/create_tickets`, {
       name,
       comment,
-    },
-  };
-
-  try {
-    // Call the api create_tickets
-    const response = await axios.get(
-      `${BACKEND_URL}/user/create_tickets`,
-      body
-    );
-
-    // If response exists
+    });
     if (response && response.data) {
-      // return the response data
       return response.data;
     }
   } catch (error) {

@@ -32,10 +32,12 @@ const Home = ({ setUser }) => {
             active: false,
           },
         ]}
-        button_text="Hello"
+        button_text="Edit"
+        button_text1="Delete"
+        button_text2="Create"
         display_avatar={true}
         display_email={true}
-        display_role={true}
+        display_action={true}
         display_status={true}
       />
     </>
