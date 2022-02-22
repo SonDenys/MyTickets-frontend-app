@@ -11,15 +11,11 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup/index";
 import Home from "./pages/Home";
 import { userTokenState } from "./globalStates";
+import { useRecoilState } from "recoil";
 
 export default function App() {
   const [token, setToken] = useState(Cookies.get("token") || null);
   const [idUser, setIdUser] = useState(Cookies.get("idUser") || null);
-
-  const logOut = () => {
-    Cookies.remove("token");
-    Cookies.remove("idUser");
-  };
 
   const setUser = (token, idUser) => {
     // Create the cookie as token

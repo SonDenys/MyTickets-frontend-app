@@ -3,6 +3,12 @@ import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon, XIcon } from "@heroicons/react/outline";
 import { create_tickets } from "../../helpers";
+import { useRecoilState } from "recoil";
+import { userTokenState } from "../../globalStates";
+import { BACKEND_URL } from "../../params";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { refreshPage } from "../../helpers/index";
 
 export interface MyModalProps {
   backgroundColor?: string;
@@ -21,6 +27,7 @@ export interface MyModalProps {
   button1_textColor?: string;
   button1_function?: any;
   button1_backgroundColor?: string;
+  button11_text?: string;
   hover_button1_backgroundColor?: string;
   onButton1Click?: any;
   button2_text?: string;
@@ -64,6 +71,7 @@ const MyModal = (props: MyModalProps) => {
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
   const [data, setData] = useState("");
+  const [userToken, setUserToken] = useState(Cookies.get("token") || null);
 
   const cancelButtonRef = useRef(null);
 
@@ -71,15 +79,20 @@ const MyModal = (props: MyModalProps) => {
     setOpen(true);
   };
 
-  const handleSubmit = async () => {
+  const handleCreate = async () => {
     try {
-      const response = await create_tickets({
-        name: title,
-        comment: comment,
-      });
+      const response = await create_tickets(
+        {
+          name: title,
+          comment: comment,
+        },
+        { headers: { authorization: `Bearer ${userToken}` } }
+      );
 
       if (response) {
         setData(response);
+        console.log("Ticket created !");
+        refreshPage();
       } else {
         console.log("The ticket has not been created");
       }
@@ -209,9 +222,18 @@ const MyModal = (props: MyModalProps) => {
                   <button
                     type="button"
                     className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 ${button1_backgroundColor} text-base font-medium text-white hover:${hover_button1_backgroundColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm`}
-                    onClick={handleSubmit}
+                    onClick={handleCreate}
                   >
                     {props.button1_text}
+                  </button>
+                )}
+                {props.button11_text && (
+                  <button
+                    type="button"
+                    className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 ${button1_backgroundColor} text-base font-medium text-white hover:${hover_button1_backgroundColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm`}
+                    // onClick={handleEdit}
+                  >
+                    {props.button11_text}
                   </button>
                 )}
                 {props.button2_text && (

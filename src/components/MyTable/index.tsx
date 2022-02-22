@@ -19,7 +19,8 @@
 //   },
 // ];
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { get_tickets } from "../../helpers";
 import MyModal from "../MyModal";
 
 export interface MyTableUsers {
@@ -35,7 +36,8 @@ export interface MyTableUsers {
 }
 
 export interface MyTableUsersProps {
-  tabs: MyTableUsers[];
+  tabs?: MyTableUsers[];
+  data: any;
   onClick?: any;
   button_text?: string;
   button_text1?: string;
@@ -49,13 +51,23 @@ export interface MyTableUsersProps {
 
 const MyTable = (props: MyTableUsersProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  // const [data, setData] = useState<any>([]);
 
-  const openModal = () => {
+  const openModal_createTicket = () => {
     setIsOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal_createTicket = () => {
     setIsOpen(false);
+  };
+
+  const openModal_editTicket = () => {
+    setOpen(true);
+  };
+
+  const closeModal_editTicket = () => {
+    setOpen(false);
   };
 
   return (
@@ -72,12 +84,7 @@ const MyTable = (props: MyTableUsersProps) => {
                   >
                     Ticket Name
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider "
-                  >
-                    User
-                  </th>
+
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -111,53 +118,17 @@ const MyTable = (props: MyTableUsersProps) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {props.tabs.map((item) => (
-                  <tr key={item.email}>
+                {props.data.map((item) => (
+                  <tr key={item._id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center ">
                         <td className=" py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">
-                            {item.ticketName}
+                            {item.name}
                           </div>
                         </td>
                       </div>
                     </td>
-
-                    <div className="items-center">
-                      <td className="px-6 py-4 whitespace-nowrap flex">
-                        {props.display_avatar && (
-                          <div className="hidden sm:inline-grid">
-                            <div className="flex-shrink-0 h-10 w-10">
-                              {item.avatar && (
-                                <img
-                                  className="h-10 w-10 rounded-full"
-                                  src={item.avatar}
-                                  alt=""
-                                />
-                              )}
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="sm:ml-4 ml-0 ">
-                          <div
-                            className=" text-sm font-medium text-gray-900 "
-                            onClick={props.onClick}
-                          >
-                            {item.name}
-                          </div>
-                          {props.display_email && (
-                            <div className="hidden sm:inline-grid">
-                              {item.email && (
-                                <div className="text-sm text-gray-500">
-                                  {item.email}
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </td>
-                    </div>
 
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
@@ -168,23 +139,20 @@ const MyTable = (props: MyTableUsersProps) => {
                     <td className=" py-4 whitespace-nowrap">
                       {props.display_status && (
                         <td className="px-6 py-4 whitespace-nowrap hidden sm:inline-grid">
-                          {item.active && (
-                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                              Active
-                            </span>
-                          )}
-                          {!item.active && (
-                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                              Inactive
-                            </span>
-                          )}
+                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Active
+                          </span>
+
+                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Inactive
+                          </span>
                         </td>
                       )}
 
                       {props.button_text && (
                         <td className=" cursor-pointer px-6 py-4 whitespace-nowrap text-right text-sm font-medium hidden sm:inline-grid">
                           <button
-                            onClick={props.onClick}
+                            onClick={openModal_editTicket}
                             className="text-indigo-600 hover:text-indigo-900"
                           >
                             {props.button_text}
@@ -211,23 +179,41 @@ const MyTable = (props: MyTableUsersProps) => {
           <div className="mt-12 flex justify-center">
             <button
               type="button"
-              onClick={openModal}
+              onClick={openModal_createTicket}
               className="inline-flex px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-indigo -700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               {props.button_text2}
             </button>
           </div>
-          {/* If modal opended */}
+
+          {/* If modal_createTicket opended */}
           {isOpen ? (
             <MyModal
               text1="Create a ticket"
               heightScreen="h-full"
               widthFull="max-w-screen"
               buttonX={true}
-              buttonX_close={() => closeModal()}
+              buttonX_close={() => closeModal_createTicket()}
               field={true}
               field1={true}
               button1_text="Create"
+              button2_text="Cancel"
+            />
+          ) : (
+            ""
+          )}
+
+          {/* If modal_editTicket opended */}
+          {open ? (
+            <MyModal
+              text1="Edit a ticket"
+              heightScreen="h-full"
+              widthFull="max-w-screen"
+              buttonX={true}
+              buttonX_close={() => closeModal_editTicket()}
+              field={true}
+              field1={true}
+              button11_text="Edit"
               button2_text="Cancel"
             />
           ) : (

@@ -4,6 +4,10 @@ import axios from "axios";
 import { BACKEND_URL } from "../params";
 import { useNavigate } from "react-router-dom";
 
+export function refreshPage() {
+  window.location.reload();
+}
+
 export async function signup({ email, password }) {
   try {
     const response = await axios.post(`${BACKEND_URL}/user/signup`, {
@@ -47,45 +51,42 @@ export async function get_tickets() {
   }
 }
 
-export async function create_tickets({ name, comment }) {
+export async function create_tickets({ name, comment }, { headers }) {
   try {
-    const response = await axios.post(`${BACKEND_URL}/user/create_tickets`, {
-      name,
-      comment,
-    });
-    if (response && response.data) {
-      return response.data;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function update_tickets({ id, name, comment }) {
-  const body = {
-    data: {
-      id,
-      name,
-      comment,
-    },
-  };
-
-  try {
-    // Call the api update_tickets
-    const response = await axios.get(
-      `${BACKEND_URL}/user/update_tickets`,
-      body
+    const response = await axios.post(
+      `${BACKEND_URL}/user/create_tickets`,
+      {
+        name,
+        comment,
+      },
+      { headers }
     );
-
-    // If response exists
     if (response && response.data) {
-      // return the response data
       return response.data;
     }
   } catch (error) {
     console.log(error);
   }
 }
+
+// export async function update_tickets({ id, name, comment }, { headers }) {
+//   try {
+//     // Call the api update_tickets
+//     const response = await axios.get(`${BACKEND_URL}/user/update_tickets`, {
+//       id,
+//       name,
+//       comment,
+//     });
+
+//     // If response exists
+//     if (response && response.data) {
+//       // return the response data
+//       return response.data;
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 export async function delete_tickets({ id }) {
   const body = {
