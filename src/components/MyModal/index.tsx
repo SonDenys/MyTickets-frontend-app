@@ -2,13 +2,14 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon, XIcon } from "@heroicons/react/outline";
-import { create_tickets } from "../../helpers";
+import { create_tickets, update_tickets } from "../../helpers";
 import { useRecoilState } from "recoil";
 import { userTokenState } from "../../globalStates";
 import { BACKEND_URL } from "../../params";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { refreshPage } from "../../helpers/index";
+import { useNavigate, useParams } from "react-router-dom";
 
 export interface MyModalProps {
   backgroundColor?: string;
@@ -72,6 +73,9 @@ const MyModal = (props: MyModalProps) => {
   const [comment, setComment] = useState("");
   const [data, setData] = useState("");
   const [userToken, setUserToken] = useState(Cookies.get("token") || null);
+  const { ticket_id } = useParams();
+
+  const navigate = useNavigate();
 
   const cancelButtonRef = useRef(null);
 
@@ -100,6 +104,55 @@ const MyModal = (props: MyModalProps) => {
       console.log(error);
     }
   };
+
+  const handleEdit = async () => {
+    try {
+      const response = await update_tickets(
+        {
+          id: ticket_id,
+          name: title,
+          comment: comment,
+        },
+        { headers: { authorization: `Bearer ${userToken}` } }
+      );
+
+      if (response) {
+        setData(response);
+        console.log("Ticket updated !");
+        navigate("/");
+      } else {
+        console.log("The ticket has not been updated");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // const handleEdit = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${BACKEND_URL}/user/update_tickets`,
+  //       {
+  //         data: {
+  //           _id: ticket_id,
+  //           name: title,
+  //           comment: comment,
+  //         },
+  //       },
+  //       { headers: { authorization: `Bearer ${userToken}` } }
+  //     );
+
+  //     if (response && response.data) {
+  //       setData(response.data);
+  //       console.log("Ticket updated !");
+  //       navigate("/");
+  //     } else {
+  //       console.log("The ticket has not been updated");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -231,7 +284,7 @@ const MyModal = (props: MyModalProps) => {
                   <button
                     type="button"
                     className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 ${button1_backgroundColor} text-base font-medium text-white hover:${hover_button1_backgroundColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm`}
-                    // onClick={handleEdit}
+                    onClick={handleEdit}
                   >
                     {props.button11_text}
                   </button>

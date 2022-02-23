@@ -20,6 +20,7 @@
 // ];
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { get_tickets } from "../../helpers";
 import MyModal from "../MyModal";
 
@@ -62,13 +63,15 @@ const MyTable = (props: MyTableUsersProps) => {
     setIsOpen(false);
   };
 
-  const openModal_editTicket = () => {
-    setOpen(true);
-  };
+  const navigate = useNavigate();
 
-  const closeModal_editTicket = () => {
-    setOpen(false);
-  };
+  // const openModal_editTicket = () => {
+  //   setOpen(true);
+  // };
+
+  // const closeModal_editTicket = () => {
+  //   setOpen(false);
+  // };
 
   return (
     <div className="flex flex-col">
@@ -152,7 +155,7 @@ const MyTable = (props: MyTableUsersProps) => {
                       {props.button_text && (
                         <td className=" cursor-pointer px-6 py-4 whitespace-nowrap text-right text-sm font-medium hidden sm:inline-grid">
                           <button
-                            onClick={openModal_editTicket}
+                            onClick={() => navigate(`edit_ticket/${item._id}`)}
                             className="text-indigo-600 hover:text-indigo-900"
                           >
                             {props.button_text}
@@ -204,7 +207,7 @@ const MyTable = (props: MyTableUsersProps) => {
           )}
 
           {/* If modal_editTicket opended */}
-          {open ? (
+          {/* {open ? (
             <MyModal
               text1="Edit a ticket"
               heightScreen="h-full"
@@ -218,7 +221,7 @@ const MyTable = (props: MyTableUsersProps) => {
             />
           ) : (
             ""
-          )}
+          )} */}
         </div>
       </div>
     </div>

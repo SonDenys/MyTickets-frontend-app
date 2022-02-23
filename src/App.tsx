@@ -12,6 +12,7 @@ import Signup from "./pages/Signup/index";
 import Home from "./pages/Home";
 import { userTokenState } from "./globalStates";
 import { useRecoilState } from "recoil";
+import EditTicket from "./pages/EditTicket";
 
 export default function App() {
   const [token, setToken] = useState(Cookies.get("token") || null);
@@ -79,6 +80,10 @@ export default function App() {
               <Navigate replace to="/login" />
             )
           }
+        />
+        <Route
+          path="/edit_ticket/:ticket_id"
+          element={token ? <EditTicket /> : <Navigate replace to="/login" />}
         />
       </Routes>
     </Router>
