@@ -2,7 +2,7 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon, XIcon } from "@heroicons/react/outline";
-import { create_tickets, update_tickets } from "../../helpers";
+import { create_tickets, delete_tickets, update_tickets } from "../../helpers";
 import { useRecoilState } from "recoil";
 import { userTokenState } from "../../globalStates";
 import { BACKEND_URL } from "../../params";
@@ -29,6 +29,7 @@ export interface MyModalProps {
   button1_function?: any;
   button1_backgroundColor?: string;
   button11_text?: string;
+  button111_text?: string;
   hover_button1_backgroundColor?: string;
   onButton1Click?: any;
   button2_text?: string;
@@ -71,7 +72,7 @@ const MyModal = (props: MyModalProps) => {
   const [open, setOpen] = useState(true);
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
-  const [data, setData] = useState("");
+  const [data, setData] = useState([]);
   const [userToken, setUserToken] = useState(Cookies.get("token") || null);
   const { ticket_id } = useParams();
 
@@ -128,31 +129,28 @@ const MyModal = (props: MyModalProps) => {
     }
   };
 
-  // const handleEdit = async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       `${BACKEND_URL}/user/update_tickets`,
-  //       {
-  //         data: {
-  //           _id: ticket_id,
-  //           name: title,
-  //           comment: comment,
-  //         },
-  //       },
-  //       { headers: { authorization: `Bearer ${userToken}` } }
-  //     );
+  const handleDelete = async () => {
+    try {
+      const response = await delete_tickets(
+        { id: ticket_id },
+        { headers: { authorization: `Bearer ${userToken}` } }
+      );
 
-  //     if (response && response.data) {
-  //       setData(response.data);
-  //       console.log("Ticket updated !");
-  //       navigate("/");
-  //     } else {
-  //       console.log("The ticket has not been updated");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+      if (response) {
+        // const newData = data.filter((item: any) => item._id !== ticket_id);
+        // setData(newData);
+        navigate("/");
+      }
+      if (!response) {
+        console.log("Delete ticket failed");
+      } else {
+        return response.data;
+      }
+    } catch (error) {
+      console.log(error);
+      console.log("there is an error on the delete_ticket api call");
+    }
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -287,6 +285,15 @@ const MyModal = (props: MyModalProps) => {
                     onClick={handleEdit}
                   >
                     {props.button11_text}
+                  </button>
+                )}
+                {props.button111_text && (
+                  <button
+                    type="button"
+                    className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 ${button1_backgroundColor} text-base font-medium text-white hover:${hover_button1_backgroundColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm`}
+                    onClick={handleDelete}
+                  >
+                    {props.button111_text}
                   </button>
                 )}
                 {props.button2_text && (

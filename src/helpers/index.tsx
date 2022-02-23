@@ -154,18 +154,17 @@ export async function update_tickets({ id, name, comment }, { headers }) {
   }
 }
 
-export async function delete_tickets({ id }) {
-  const body = {
-    data: {
-      id,
-    },
-  };
+export async function delete_tickets({ id }, { headers }) {
+  const body = prepare_body({
+    id,
+  });
 
   try {
     // Call the api delete_tickets
-    const response = await axios.get(
+    const response = await axios.post(
       `${BACKEND_URL}/user/delete_tickets`,
-      body
+      body,
+      { headers }
     );
 
     // If response exists

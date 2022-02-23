@@ -22,6 +22,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { get_tickets } from "../../helpers";
+import ConfirmButton from "../ConfirmButton";
 import MyModal from "../MyModal";
 
 export interface MyTableUsers {
@@ -53,7 +54,6 @@ export interface MyTableUsersProps {
 const MyTable = (props: MyTableUsersProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  // const [data, setData] = useState<any>([]);
 
   const openModal_createTicket = () => {
     setIsOpen(true);
@@ -64,14 +64,6 @@ const MyTable = (props: MyTableUsersProps) => {
   };
 
   const navigate = useNavigate();
-
-  // const openModal_editTicket = () => {
-  //   setOpen(true);
-  // };
-
-  // const closeModal_editTicket = () => {
-  //   setOpen(false);
-  // };
 
   return (
     <div className="flex flex-col">
@@ -166,7 +158,9 @@ const MyTable = (props: MyTableUsersProps) => {
                       {props.button_text1 && (
                         <td className=" cursor-pointer px-6 py-4 whitespace-nowrap text-right text-sm font-medium hidden sm:inline-grid">
                           <button
-                            onClick={props.onClick}
+                            onClick={() =>
+                              navigate(`delete_ticket/${item._id}`)
+                            }
                             className="text-indigo-600 hover:text-indigo-900"
                           >
                             {props.button_text1}
@@ -205,23 +199,6 @@ const MyTable = (props: MyTableUsersProps) => {
           ) : (
             ""
           )}
-
-          {/* If modal_editTicket opended */}
-          {/* {open ? (
-            <MyModal
-              text1="Edit a ticket"
-              heightScreen="h-full"
-              widthFull="max-w-screen"
-              buttonX={true}
-              buttonX_close={() => closeModal_editTicket()}
-              field={true}
-              field1={true}
-              button11_text="Edit"
-              button2_text="Cancel"
-            />
-          ) : (
-            ""
-          )} */}
         </div>
       </div>
     </div>

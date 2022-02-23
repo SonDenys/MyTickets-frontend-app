@@ -1,10 +1,14 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import MyTable from "../../components/MyTable";
+import SearchBox from "../../components/SearchBox";
 import { get_tickets } from "../../helpers";
+import { BACKEND_URL } from "../../params";
 
 const Home = ({ setUser }) => {
   const [data, setData] = useState<any>([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -21,6 +25,7 @@ const Home = ({ setUser }) => {
   return (
     <>
       <Header setUser={setUser} />
+      <SearchBox setSearch={setSearch} />
       <MyTable
         data={data}
         button_text="Edit"
