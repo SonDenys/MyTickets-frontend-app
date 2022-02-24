@@ -7,41 +7,59 @@ import { get_tickets } from "../../helpers";
 import { BACKEND_URL } from "../../params";
 
 const Home = ({ setUser }) => {
-  const [data, setData] = useState<any>([]);
-  const [search, setSearch] = useState("");
+  // Il faut utiliser deux listes.
+  // Il y a une liste qui va servir de liste par défaut (ticketsList) et une autre qui sera alimentés par la barre de recherche (searchTicketsList)
+  // ticketsList: Une liste pour l'ensemble des tickets retournés par l'api
+  // searchTicketsList: Une liste qui va servir pour le filtre de la recherche
+  const [ticketsList, setTicketsList] = useState<any>([]);
+  const [searchTicketsList, setSearchTicketsList] = useState<any>([]);
 
   useEffect(() => {
     (async () => {
-      try {
-        const response = await get_tickets();
-        setData(response);
-        console.log("response get_ticket", response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      await fetchTickets();
     })();
   }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${BACKEND_URL}/user/get_tickets?name=${search}`
-  //       );
-  //       setData(response);
-  //       console.log("response get_ticket", response.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   })();
-  // }, []);
+  const fetchTickets = async () => {
+    try {
+      const response = await get_tickets();
+      setSearchTicketsList(response);
+      setTicketsList(response);
+      console.log("response get_ticket", response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const searchTickets = (text) => {
+    return ticketsList.filter((ticket) => {
+      const ticketName = ticket.name.toLowerCase();
+
+      // On utilise une expression regulière qui indique qu'on recherche un text qui doit matcher le début de ticket.name
+      const regex = new RegExp("^" + text, "i");
+
+      // Si y a match on retourne l'élément qui matche sinon on retourne tout le tableau
+      return regex.test(ticketName);
+    });
+  };
+
+  const onSearch = (text: string) => {
+    // Récupérer dans la liste ticketsList la valeur qui correspond  à ce qui est entrée dans la barre de recherche
+
+    const newTicketsList = searchTickets(text.toLowerCase());
+    if (newTicketsList.length <= 0) {
+      setSearchTicketsList(ticketsList);
+      return;
+    }
+    setSearchTicketsList(newTicketsList);
+  };
 
   return (
     <>
       <Header setUser={setUser} />
-      <SearchBox setSearch={setSearch} />
+      <SearchBox handleSearch={onSearch} />
       <MyTable
-        data={data}
+        data={searchTicketsList}
         button_text="Edit"
         button_text1="Delete"
         button_text2="Create"

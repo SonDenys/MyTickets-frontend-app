@@ -20,25 +20,26 @@ export default function App() {
   const [idUser, setIdUser] = useState(Cookies.get("idUser") || null);
 
   const setUser = (token, idUser) => {
-    // Create the cookie as token
-    if (token) {
-      setToken(token);
-      Cookies.set("token", token, {
-        expires: 3,
-      });
-      // Create the cookie as idUser
-      if (idUser) {
-        setIdUser(idUser);
-        Cookies.set("idUser", idUser, {
-          expires: 3,
-        });
-      }
-    } else {
+    if (!token) {
       setToken(null);
       setIdUser(null);
       Cookies.remove("token");
       Cookies.remove("idUser");
+      return;
     }
+    // Create the cookie as token
+    setToken(token);
+    Cookies.set("token", token, {
+      expires: 3,
+    });
+    if (!idUser) {
+      return;
+    }
+    // Create the cookie as idUser
+    setIdUser(idUser);
+    Cookies.set("idUser", idUser, {
+      expires: 3,
+    });
   };
 
   const config_json = {

@@ -47,9 +47,10 @@ export async function signup({ email, password }) {
       email,
       password,
     });
-    if (response && response.data) {
-      return response.data;
+    if (!response || response.data) {
+      return;
     }
+    return response.data;
   } catch (error) {
     console.log(error);
   }

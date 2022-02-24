@@ -39,6 +39,7 @@ export interface MyTableUsers {
 
 export interface MyTableUsersProps {
   tabs?: MyTableUsers[];
+  input?: any;
   data: any;
   onClick?: any;
   button_text?: string;
