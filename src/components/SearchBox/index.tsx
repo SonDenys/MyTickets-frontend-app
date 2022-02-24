@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { get_tickets } from "../../helpers";
+import { BACKEND_URL } from "../../params";
 
 const SearchBox = ({ setSearch }) => {
   return (

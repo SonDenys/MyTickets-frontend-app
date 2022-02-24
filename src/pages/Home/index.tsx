@@ -22,6 +22,20 @@ const Home = ({ setUser }) => {
     })();
   }, []);
 
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${BACKEND_URL}/user/get_tickets?name=${search}`
+  //       );
+  //       setData(response);
+  //       console.log("response get_ticket", response.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   })();
+  // }, []);
+
   return (
     <>
       <Header setUser={setUser} />
