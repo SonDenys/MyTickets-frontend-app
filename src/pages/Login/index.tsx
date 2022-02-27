@@ -13,10 +13,6 @@ const Login = ({ setUser, setIdUser }) => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // const [token_cookie, setToken_cookie] = useState(
-  //   Cookies.get("token") || null
-  // );
-
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
@@ -26,18 +22,13 @@ const Login = ({ setUser, setIdUser }) => {
         password: password,
       });
 
-      console.log("response login == ", response);
-
-      if (response.token) {
+      if (response.token && response.id) {
         // Save the Token and the Id in the state user
-        console.log("userToken ===>", response.token);
-        console.log("userId ===>", response.id);
         setUser(response.token, response.id);
 
-        if (response.userId) {
-          setIdUser(response.id);
-          console.log("userId ==>", response.id);
-        }
+        // if (response.userId) {
+        //   setIdUser(response.id);
+        // }
 
         // Redirect the user to the Homepage
         navigate("/");
@@ -60,12 +51,12 @@ const Login = ({ setUser, setIdUser }) => {
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Or{" "}
-              <a
+              <p
                 onClick={() => navigate("/signup")}
-                className="cursor-pointer font-medium text-indigo-600 hover:text-indigo-500"
+                className="cursor-pointer font-medium text-teal-600 hover:text-teal-500"
               >
                 create an account
-              </a>
+              </p>
             </p>
           </div>
           <form className="mt-8 space-y-6" action="#" method="POST">
@@ -81,7 +72,7 @@ const Login = ({ setUser, setIdUser }) => {
                   type="email"
                   autoComplete="email"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm"
                   placeholder="Email address"
                   onChange={(event) => setEmail(event.target.value)}
                   value={email}
@@ -97,7 +88,7 @@ const Login = ({ setUser, setIdUser }) => {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm"
                   placeholder="Password"
                   onChange={(event) => setPassword(event.target.value)}
                   value={password}
@@ -111,7 +102,7 @@ const Login = ({ setUser, setIdUser }) => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
                 />
                 <label
                   htmlFor="remember-me"
@@ -122,23 +113,25 @@ const Login = ({ setUser, setIdUser }) => {
               </div>
 
               <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
+                <p className="font-medium text-teal-600 hover:text-teal-500">
                   Forgot your password?
-                </a>
+                </p>
+              </div>
+              <div className="text-sm">
+                <p className="font-medium text-red-600 hover:text-red-500">
+                  {errorMessage}
+                </p>
               </div>
             </div>
 
             <div>
               <button
                 onClick={handleSubmit}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
               >
                 <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                   <LockClosedIcon
-                    className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                    className="h-5 w-5 text-teal-500 group-hover:text-teal-400"
                     aria-hidden="true"
                   />
                 </span>

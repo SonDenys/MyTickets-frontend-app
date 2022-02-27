@@ -18,12 +18,7 @@ const Signup = ({ setUser }) => {
         password: password,
       });
 
-      console.log("response signup == ", response);
-
       if (response) {
-        // Save the Token and the Id in the state user
-        console.log("userToken ===>", response.token);
-        // await setUser(response.token, response.id);
         navigate("/login");
       } else if (password !== confirmPassword) {
         setErrorPassword(true);
@@ -31,15 +26,12 @@ const Signup = ({ setUser }) => {
       } else if (email.length <= 0 || password.length <= 0) {
         setFieldRequired("⚠️ At least one field is missing");
       } else {
-        // throw "asdasd";
         setErrorMessage("⚠️ Could not create the account");
       }
     } catch (error) {
       console.error(`Could not signup ${error}`);
     }
   };
-
-  console.log("email ===", email);
 
   return (
     <>
@@ -52,12 +44,12 @@ const Signup = ({ setUser }) => {
               </h2>
               <p className="mt-2 text-center text-sm text-gray-600">
                 Or{" "}
-                <a
+                <p
                   onClick={() => navigate("/login")}
-                  className="cursor-pointer font-medium text-indigo-600 hover:text-indigo-500"
+                  className="cursor-pointer font-medium text-teal-600 hover:text-teal-500"
                 >
                   login to your account
-                </a>
+                </p>
               </p>
             </div>
 
@@ -78,7 +70,7 @@ const Signup = ({ setUser }) => {
                         type="email"
                         autoComplete="email"
                         required
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                         onChange={(event) => setEmail(event.target.value)}
                         value={email}
                       />
@@ -99,7 +91,7 @@ const Signup = ({ setUser }) => {
                         type="password"
                         autoComplete="current-password"
                         required
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                         onChange={(event) => setPassword(event.target.value)}
                         value={password}
                       />
@@ -120,7 +112,7 @@ const Signup = ({ setUser }) => {
                         type="password"
                         autoComplete="current-password"
                         required
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                         onChange={(event) =>
                           setConfirmPassword(event.target.value)
                         }
@@ -134,7 +126,7 @@ const Signup = ({ setUser }) => {
                         id="remember-me"
                         name="remember-me"
                         type="checkbox"
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
                       />
                       <label
                         htmlFor="remember-me"
@@ -145,19 +137,16 @@ const Signup = ({ setUser }) => {
                     </div>
 
                     <div className="text-sm">
-                      <a
-                        href="#"
-                        className="font-medium text-indigo-600 hover:text-indigo-500"
-                      >
+                      <p className="font-medium text-teal-600 hover:text-teal-500">
                         Forgot your password?
-                      </a>
+                      </p>
                     </div>
                   </div>
 
                   <div>
                     <button
                       onClick={handleSubmit}
-                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
                     >
                       Sign up
                     </button>

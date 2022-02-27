@@ -32,7 +32,6 @@ export interface MyTableUsersProps {
   display_statusWorkingOnIt?: boolean;
   display_statusStuck?: boolean;
   display_statusNotStarted?: boolean;
-  //   display_button: boolean;
 }
 
 const MyTable = (props: MyTableUsersProps) => {

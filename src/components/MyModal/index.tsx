@@ -10,12 +10,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { refreshPage } from "../../helpers/index";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  statusDone_state,
-  statusWorkingOnIt_state,
-  statusStuck_state,
-  statusNotStarted_state,
-} from "../../globalStates/index";
 
 export interface MyModalProps {
   backgroundColor?: string;
@@ -58,7 +52,6 @@ export interface MyModalProps {
   field?: boolean;
   field1?: boolean;
   button_status?: boolean;
-
   onClick_statusDone?: any;
   onClick_statusWorkingOnIt?: any;
   onClick_statusStuck?: any;
@@ -84,14 +77,13 @@ const MyModal = (props: MyModalProps) => {
   const [open, setOpen] = useState(true);
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
-  const [data, setData] = useState([]);
   const [userToken, setUserToken] = useState(Cookies.get("token") || null);
 
   const { ticket_id } = useParams();
 
-  const navigate = useNavigate();
-
   const cancelButtonRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const openModal = () => {
     setOpen(true);
@@ -107,13 +99,11 @@ const MyModal = (props: MyModalProps) => {
         { headers: { authorization: `Bearer ${userToken}` } }
       );
 
-      if (response) {
-        setData(response);
-        console.log("Ticket created !");
-        refreshPage();
-      } else {
+      if (!response) {
         console.log("The ticket has not been created");
       }
+      console.log("Ticket created !");
+      refreshPage();
     } catch (error) {
       console.log(error);
     }
@@ -130,13 +120,11 @@ const MyModal = (props: MyModalProps) => {
         { headers: { authorization: `Bearer ${userToken}` } }
       );
 
-      if (response) {
-        setData(response);
-        console.log("Ticket updated !");
-        navigate("/");
-      } else {
+      if (!response) {
         console.log("The ticket has not been updated");
       }
+      console.log("Ticket updated !");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -149,16 +137,12 @@ const MyModal = (props: MyModalProps) => {
         { headers: { authorization: `Bearer ${userToken}` } }
       );
 
-      if (response) {
+      if (!response) {
         // const newData = data.filter((item: any) => item._id !== ticket_id);
         // setData(newData);
-        navigate("/");
-      }
-      if (!response) {
         console.log("Delete ticket failed");
-      } else {
-        return response.data;
       }
+      navigate("/");
     } catch (error) {
       console.log(error);
       console.log("there is an error on the delete_ticket api call");
@@ -219,6 +203,8 @@ const MyModal = (props: MyModalProps) => {
                     />
                   </div>
                 )}
+
+                {/* Button Close */}
                 {props.buttonX && (
                   <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4 cursor-pointer">
                     <XIcon
@@ -229,6 +215,7 @@ const MyModal = (props: MyModalProps) => {
                   </div>
                 )}
 
+                {/* Title */}
                 <div className="mt-3 sm:mt-5">
                   <Dialog.Title
                     as="h3"
@@ -236,9 +223,13 @@ const MyModal = (props: MyModalProps) => {
                   >
                     {props.text1}
                   </Dialog.Title>
+
+                  {/* SubTitle */}
                   <div className="mt-2">
                     <p className={`text-sm ${text2Color}`}>{props.text2}</p>
                   </div>
+
+                  {/* Text */}
                   <div className="mt-2">
                     <div
                       className={`text-sm ${text2Color}`}
@@ -248,6 +239,7 @@ const MyModal = (props: MyModalProps) => {
                 </div>
               </div>
 
+              {/* Field */}
               {props.field && (
                 <div>
                   <label htmlFor="email-address" className="sr-only">
@@ -266,6 +258,8 @@ const MyModal = (props: MyModalProps) => {
                   />
                 </div>
               )}
+
+              {/* Field */}
               {props.field1 && (
                 <div className="mt-6">
                   <textarea
@@ -281,6 +275,7 @@ const MyModal = (props: MyModalProps) => {
                 </div>
               )}
 
+              {/* Create Button */}
               <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                 {props.button1_text && (
                   <button
@@ -291,6 +286,8 @@ const MyModal = (props: MyModalProps) => {
                     {props.button1_text}
                   </button>
                 )}
+
+                {/* Edit Button */}
                 {props.button11_text && (
                   <button
                     type="button"
@@ -300,6 +297,8 @@ const MyModal = (props: MyModalProps) => {
                     {props.button11_text}
                   </button>
                 )}
+
+                {/* Delete Button */}
                 {props.button111_text && (
                   <button
                     type="button"
@@ -309,10 +308,12 @@ const MyModal = (props: MyModalProps) => {
                     {props.button111_text}
                   </button>
                 )}
+
+                {/* Cancel Button */}
                 {props.button2_text && (
                   <button
                     type="button"
-                    className={`mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 ${button2_backgroundColor} text-base font-medium text-gray-700 hover:${hover_button2_backgroundColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm`}
+                    className={`mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 ${button2_backgroundColor} text-base font-medium text-gray-700 hover:${hover_button2_backgroundColor} focus:outline-none focus:ring-2 focus:ring-offset-2  sm:mt-0 sm:col-start-1 sm:text-sm`}
                     onClick={props.buttonX_close}
                     ref={cancelButtonRef}
                   >
@@ -325,7 +326,7 @@ const MyModal = (props: MyModalProps) => {
                     <>
                       <button
                         type="button"
-                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-300 text-base font-medium text-green-800 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
+                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-20 py-5 bg-green-300 text-base font-medium text-green-800 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
                         onClick={props.onClick_statusDone}
                       >
                         Done
@@ -333,7 +334,7 @@ const MyModal = (props: MyModalProps) => {
 
                       <button
                         type="button"
-                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-orange-300 text-base font-medium text-orange-800 hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
+                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-20 py-5 bg-orange-300 text-base font-medium text-orange-800 hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
                         onClick={props.onClick_statusWorkingOnIt}
                       >
                         Working on it
@@ -341,7 +342,7 @@ const MyModal = (props: MyModalProps) => {
 
                       <button
                         type="button"
-                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-300 text-base font-medium text-red-800 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
+                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-20 py-5 bg-red-300 text-base font-medium text-red-800 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
                         onClick={props.onClick_statusStuck}
                       >
                         Stuck
@@ -349,7 +350,7 @@ const MyModal = (props: MyModalProps) => {
 
                       <button
                         type="button"
-                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-300 text-base font-medium text-gray-800 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
+                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-20 py-5 bg-gray-300 text-base font-medium text-gray-800 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
                         onClick={props.onClick_statusNotStarted}
                       >
                         Not Started

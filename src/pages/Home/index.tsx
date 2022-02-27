@@ -5,6 +5,7 @@ import MyTable from "../../components/MyTable";
 import SearchBox from "../../components/SearchBox";
 import { get_tickets } from "../../helpers";
 import { BACKEND_URL } from "../../params";
+import SpinningBubbles from "react-loading";
 
 const Home = ({
   setUser,
@@ -13,6 +14,8 @@ const Home = ({
   statusStuck,
   statusWorkingOnIt,
 }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
   // Il faut utiliser deux listes.
   // Il y a une liste qui va servir de liste par défaut (ticketsList) et une autre qui sera alimentés par la barre de recherche (searchTicketsList)
   // ticketsList: Une liste pour l'ensemble des tickets retournés par l'api
@@ -29,38 +32,47 @@ const Home = ({
   const fetchTickets = async () => {
     try {
       const response = await get_tickets();
-      setSearchTicketsList(response);
+      // 1e Liste par défaut
       setTicketsList(response);
-      console.log("response get_ticket", response.data);
+      // 2e Liste alimentés par la barre de recherche
+      setSearchTicketsList(response);
+      // Met fin à l'écran de chargement
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const searchTickets = (text) => {
+  const searchTickets = (text: string) => {
     return ticketsList.filter((ticket) => {
       const ticketName = ticket.name.toLowerCase();
 
-      // On utilise une expression regulière qui indique qu'on recherche un text qui doit matcher le début de ticket.name
+      // On utilise une expression regulière qui indique qu'on recherche un text qui doit matcher avec le début de ticket.name
       const regex = new RegExp("^" + text, "i");
 
-      // Si y a match on retourne l'élément qui matche sinon on retourne tout le tableau
+      // On retourne l'élément qui match
       return regex.test(ticketName);
     });
   };
 
   const onSearch = (text: string) => {
-    // Récupérer dans la liste ticketsList la valeur qui correspond  à ce qui est entrée dans la barre de recherche
+    // Récupérer dans la liste ticketsList la valeur qui correspond à ce qui est entrée dans la barre de recherche
 
-    const newTicketsList = searchTickets(text.toLowerCase());
+    const newTicketsList = searchTickets(text);
+    // S'il n'y a pas de rechercher, on retourne tout le tableau
     if (newTicketsList.length <= 0) {
       setSearchTicketsList(ticketsList);
       return;
     }
+    // Sinon on retourne la nouvelle liste recherchée
     setSearchTicketsList(newTicketsList);
   };
 
-  return (
+  return isLoading ? (
+    <div className="flex justify-center items-center mt-72">
+      <SpinningBubbles color="#80ADA0" />
+    </div>
+  ) : (
     <>
       <Header setUser={setUser} />
       <SearchBox handleSearch={onSearch} />

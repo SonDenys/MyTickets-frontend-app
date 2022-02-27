@@ -5,14 +5,11 @@ import {
   Navigate,
   Route,
   Routes,
-  useNavigate,
 } from "react-router-dom";
 import Header from "./components/Header";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup/index";
 import Home from "./pages/Home";
-import { userTokenState } from "./globalStates";
-import { useRecoilState } from "recoil";
 import EditTicket from "./pages/EditTicket";
 import DeleteTicket from "./pages/DeleteTicket";
 import UpdateTicketStatus from "./pages/UpdateTicketStatus";
@@ -20,11 +17,15 @@ import UpdateTicketStatus from "./pages/UpdateTicketStatus";
 export default function App() {
   const [token, setToken] = useState(Cookies.get("token") || null);
   const [idUser, setIdUser] = useState(Cookies.get("idUser") || null);
+
+  // The status of the tickets with states
   const [statusDone, setStatusDone] = useState(false);
   const [statusWorkingOnIt, setStatusWorkingOnIt] = useState(false);
   const [statusStuck, setStatusStuck] = useState(false);
   const [statusNotStarted, setStatusNotStarted] = useState(true);
 
+  // We call the function setUser when we signup, login or logout in order to create the cookie as token
+  // Then this cookie 'token' will be used as an authenticator to access to the application
   const setUser = (token, idUser) => {
     if (!token) {
       setToken(null);
@@ -33,7 +34,8 @@ export default function App() {
       Cookies.remove("idUser");
       return;
     }
-    // Create the cookie as token
+    // We set the token
+    // and we create the cookie as token
     setToken(token);
     Cookies.set("token", token, {
       expires: 3,
@@ -41,21 +43,15 @@ export default function App() {
     if (!idUser) {
       return;
     }
-    // Create the cookie as idUser
+    // We set the token
+    // and we create the cookie as idUser
     setIdUser(idUser);
     Cookies.set("idUser", idUser, {
       expires: 3,
     });
   };
 
-  const config_json = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  console.log("token app = = ==", token);
-
+  // When we select a status, the others status become false and won't be displayed
   const select_statusDone = () => {
     setStatusDone(true);
     setStatusNotStarted(false);
@@ -139,7 +135,4 @@ export default function App() {
       </Routes>
     </Router>
   );
-}
-function setToken(token: any) {
-  throw new Error("Function not implemented.");
 }
