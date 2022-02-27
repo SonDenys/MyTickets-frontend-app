@@ -5,6 +5,7 @@ import {
   Navigate,
   Route,
   Routes,
+  useNavigate,
 } from "react-router-dom";
 import Header from "./components/Header";
 import Login from "./pages/Login";
@@ -14,10 +15,15 @@ import { userTokenState } from "./globalStates";
 import { useRecoilState } from "recoil";
 import EditTicket from "./pages/EditTicket";
 import DeleteTicket from "./pages/DeleteTicket";
+import UpdateTicketStatus from "./pages/UpdateTicketStatus";
 
 export default function App() {
   const [token, setToken] = useState(Cookies.get("token") || null);
   const [idUser, setIdUser] = useState(Cookies.get("idUser") || null);
+  const [statusDone, setStatusDone] = useState(false);
+  const [statusWorkingOnIt, setStatusWorkingOnIt] = useState(false);
+  const [statusStuck, setStatusStuck] = useState(false);
+  const [statusNotStarted, setStatusNotStarted] = useState(true);
 
   const setUser = (token, idUser) => {
     if (!token) {
@@ -50,19 +56,37 @@ export default function App() {
 
   console.log("token app = = ==", token);
 
+  const select_statusDone = () => {
+    setStatusDone(true);
+    setStatusNotStarted(false);
+    setStatusStuck(false);
+    setStatusWorkingOnIt(false);
+  };
+
+  const select_statusNotStarted = () => {
+    setStatusDone(false);
+    setStatusNotStarted(true);
+    setStatusStuck(false);
+    setStatusWorkingOnIt(false);
+  };
+
+  const select_statusStuck = () => {
+    setStatusDone(false);
+    setStatusNotStarted(false);
+    setStatusStuck(true);
+    setStatusWorkingOnIt(false);
+  };
+
+  const select_statusWorkingOnIt = () => {
+    setStatusDone(false);
+    setStatusNotStarted(false);
+    setStatusStuck(false);
+    setStatusWorkingOnIt(true);
+  };
+
   return (
     <Router>
       <Routes>
-        {/* <Route
-          path="/login"
-          caseSensitive={false}
-          element={<Login setUser={setUser} setUserId={setIdUser} />}
-        />
-        <Route
-          path="/signup"
-          caseSensitive={false}
-          element={<Signup setUser={setUser} />}
-        /> */}
         <Route
           path="/login"
           caseSensitive={false}
@@ -77,7 +101,13 @@ export default function App() {
           path="/"
           element={
             token ? (
-              <Home setUser={setUser} />
+              <Home
+                setUser={setUser}
+                statusDone={statusDone}
+                statusNotStarted={statusNotStarted}
+                statusStuck={statusStuck}
+                statusWorkingOnIt={statusWorkingOnIt}
+              />
             ) : (
               <Navigate replace to="/login" />
             )
@@ -90,6 +120,21 @@ export default function App() {
         <Route
           path="/delete_ticket/:ticket_id"
           element={token ? <DeleteTicket /> : <Navigate replace to="/login" />}
+        />
+        <Route
+          path="/update_ticket_status/:ticket_id"
+          element={
+            token ? (
+              <UpdateTicketStatus
+                select_statusDone={select_statusDone}
+                select_statusNotStarted={select_statusNotStarted}
+                select_statusStuck={select_statusStuck}
+                select_statusWorkingOnIt={select_statusWorkingOnIt}
+              />
+            ) : (
+              <Navigate replace to="/login" />
+            )
+          }
         />
       </Routes>
     </Router>

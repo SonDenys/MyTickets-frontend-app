@@ -10,6 +10,12 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { refreshPage } from "../../helpers/index";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  statusDone_state,
+  statusWorkingOnIt_state,
+  statusStuck_state,
+  statusNotStarted_state,
+} from "../../globalStates/index";
 
 export interface MyModalProps {
   backgroundColor?: string;
@@ -51,6 +57,12 @@ export interface MyModalProps {
   datePicker2?: boolean;
   field?: boolean;
   field1?: boolean;
+  button_status?: boolean;
+
+  onClick_statusDone?: any;
+  onClick_statusWorkingOnIt?: any;
+  onClick_statusStuck?: any;
+  onClick_statusNotStarted?: any;
 }
 
 const MyModal = (props: MyModalProps) => {
@@ -74,6 +86,7 @@ const MyModal = (props: MyModalProps) => {
   const [comment, setComment] = useState("");
   const [data, setData] = useState([]);
   const [userToken, setUserToken] = useState(Cookies.get("token") || null);
+
   const { ticket_id } = useParams();
 
   const navigate = useNavigate();
@@ -306,6 +319,44 @@ const MyModal = (props: MyModalProps) => {
                     {props.button2_text}
                   </button>
                 )}
+
+                <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                  {props.button_status && (
+                    <>
+                      <button
+                        type="button"
+                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-300 text-base font-medium text-green-800 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
+                        onClick={props.onClick_statusDone}
+                      >
+                        Done
+                      </button>
+
+                      <button
+                        type="button"
+                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-orange-300 text-base font-medium text-orange-800 hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
+                        onClick={props.onClick_statusWorkingOnIt}
+                      >
+                        Working on it
+                      </button>
+
+                      <button
+                        type="button"
+                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-300 text-base font-medium text-red-800 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
+                        onClick={props.onClick_statusStuck}
+                      >
+                        Stuck
+                      </button>
+
+                      <button
+                        type="button"
+                        className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-300 text-base font-medium text-gray-800 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm`}
+                        onClick={props.onClick_statusNotStarted}
+                      >
+                        Not Started
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </Transition.Child>

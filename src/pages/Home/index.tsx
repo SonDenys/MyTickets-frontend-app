@@ -6,7 +6,13 @@ import SearchBox from "../../components/SearchBox";
 import { get_tickets } from "../../helpers";
 import { BACKEND_URL } from "../../params";
 
-const Home = ({ setUser }) => {
+const Home = ({
+  setUser,
+  statusDone,
+  statusNotStarted,
+  statusStuck,
+  statusWorkingOnIt,
+}) => {
   // Il faut utiliser deux listes.
   // Il y a une liste qui va servir de liste par défaut (ticketsList) et une autre qui sera alimentés par la barre de recherche (searchTicketsList)
   // ticketsList: Une liste pour l'ensemble des tickets retournés par l'api
@@ -67,6 +73,10 @@ const Home = ({ setUser }) => {
         display_email={false}
         display_action={true}
         display_status={true}
+        display_statusDone={statusDone}
+        display_statusNotStarted={statusNotStarted}
+        display_statusStuck={statusStuck}
+        display_statusWorkingOnIt={statusWorkingOnIt}
       />
     </>
   );

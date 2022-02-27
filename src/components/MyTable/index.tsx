@@ -1,24 +1,3 @@
-// const people = [
-//   {
-//     name: "Jane Cooper",
-//     title: "Regional Paradigm Technician",
-//     department: "Optimization",
-//     role: "Admin",
-//     email: "jane.cooper@example.com",
-//     image:
-//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
-//   },
-//   {
-//     name: "Arlene Mccoy",
-//     title: "Regional Paradigm Technician",
-//     department: "Optimization",
-//     role: "Admin",
-//     email: "arlene.mccoy@example.com",
-//     image:
-//       "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//   },
-// ];
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { get_tickets } from "../../helpers";
@@ -45,16 +24,19 @@ export interface MyTableUsersProps {
   button_text?: string;
   button_text1?: string;
   button_text2?: string;
-  display_avatar: boolean;
-  display_email: boolean;
-  display_status: boolean;
-  display_action: boolean;
+  display_avatar?: boolean;
+  display_email?: boolean;
+  display_action?: boolean;
+  display_status?: boolean;
+  display_statusDone?: boolean;
+  display_statusWorkingOnIt?: boolean;
+  display_statusStuck?: boolean;
+  display_statusNotStarted?: boolean;
   //   display_button: boolean;
 }
 
 const MyTable = (props: MyTableUsersProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [open, setOpen] = useState(false);
 
   const openModal_createTicket = () => {
     setIsOpen(true);
@@ -105,12 +87,6 @@ const MyTable = (props: MyTableUsersProps) => {
                       Action
                     </th>
                   )}
-                  {/* <th
-                    scope="col"
-                    className="relative px-6 py-3 hidden sm:inline-grid"
-                  >
-                    <span className="sr-only">Edit</span>
-                  </th> */}
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -134,14 +110,35 @@ const MyTable = (props: MyTableUsersProps) => {
 
                     <td className=" py-4 whitespace-nowrap">
                       {props.display_status && (
-                        <td className="px-6 py-4 whitespace-nowrap hidden sm:inline-grid">
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            Active
-                          </span>
+                        <td
+                          className="px-6 py-4 whitespace-nowrap hidden sm:inline-grid cursor-pointer"
+                          onClick={() =>
+                            navigate(`update_ticket_status/${item._id}`)
+                          }
+                        >
+                          {props.display_statusDone && (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              Done
+                            </span>
+                          )}
 
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                            Inactive
-                          </span>
+                          {props.display_statusWorkingOnIt && (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">
+                              Working on it
+                            </span>
+                          )}
+
+                          {props.display_statusStuck && (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                              Stuck
+                            </span>
+                          )}
+
+                          {props.display_statusNotStarted && (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                              Not Started
+                            </span>
+                          )}
                         </td>
                       )}
 
@@ -184,7 +181,7 @@ const MyTable = (props: MyTableUsersProps) => {
             </button>
           </div>
 
-          {/* If modal_createTicket opended */}
+          {/* If modal_createTicket opened */}
           {isOpen ? (
             <MyModal
               text1="Create a ticket"
