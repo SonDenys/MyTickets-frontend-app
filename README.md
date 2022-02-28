@@ -14,6 +14,7 @@ Developed functionalities :
 - Read the tickets
 - Update the tickets
 - Delete the tickets
+- Changing the status of the tickets (Done, Working on it, Stuck, Not Started)
 
 Front-end : 
 ![](https://img.shields.io/badge/Code-React-informational?style=flat&logo=react&logoColor=white&color=EDAE49)
