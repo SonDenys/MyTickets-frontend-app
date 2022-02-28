@@ -12,17 +12,21 @@ export function prepare_body(q = {}, as_query_string = false) {
   const new_q = {};
   const q_str: any = [];
 
+  // Parfois, lorsqu'on veut envoyer des parametres avec une requete,on les envoies de type query param ou de type body param
+
   if (as_query_string) {
     for (let k in q) {
       if (q[k] === undefined || q[k] === null) {
         continue;
       }
+      // si body param on les inseres comme un JSON
       q_str.push(encodeURIComponent(k) + "=" + encodeURIComponent(q[k]));
     }
     if (q_str.length === 0) {
       return "";
     }
 
+    // si query param on les concaténe avec '&' avec le lien
     const resp = q_str.join("&");
     if (resp) {
       return "?" + resp;
@@ -102,34 +106,6 @@ export async function create_tickets({ name, comment }, { headers }) {
     console.log(error);
   }
 }
-
-// export async function update_tickets(
-//   { data: { id, name, comment } },
-//   { headers }
-// ) {
-//   try {
-//     // Call the api update_tickets
-//     const response = await axios.post(
-//       `${BACKEND_URL}/user/update_tickets`,
-//       {
-//         data: {
-//           id,
-//           name,
-//           comment,
-//         },
-//       },
-//       { headers }
-//     );
-
-//     // If response exists
-//     if (response && response.data) {
-//       // return the response data
-//       return response.data;
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 export async function update_tickets({ id, name, comment }, { headers }) {
   const body = prepare_body({
