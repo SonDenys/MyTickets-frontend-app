@@ -20,13 +20,16 @@ const Signup = ({ setUser }) => {
 
       if (!response) {
         setErrorMessage("⚠️ Could not create the account");
-      } else if (password !== confirmPassword) {
-        setErrorPassword(true);
-        setErrorMessage("⚠️ Your password are not the same");
-      } else if (email.length <= 0 || password.length <= 0) {
-        setFieldRequired("⚠️ At least one field is missing");
+        if (password !== confirmPassword) {
+          setErrorPassword(true);
+          setErrorMessage("⚠️ Your password are not the same");
+        }
+        if (email.length <= 0 || password.length <= 0) {
+          setFieldRequired("⚠️ At least one field is missing");
+        } else {
+          navigate("/login");
+        }
       }
-      navigate("/login");
     } catch (error) {
       console.error(`Could not signup ${error}`);
     }
