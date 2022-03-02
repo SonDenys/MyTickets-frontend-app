@@ -5,7 +5,7 @@
 ### Frontend Part
 This is a small ticketing app. The project is still in progress.
 <br>
-<!-- You can visit the replica directly [here](https://gamepad-clone-bydenis.netlify.app/) -->
+You can visit the replica directly [here](https://denys-tickets-app.netlify.app/)
 
 Developed functionalities :
 - Authentification SignIn & SignOut with cookies
