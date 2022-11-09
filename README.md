@@ -1,4 +1,4 @@
-﻿# Mytroopers-frontend-app
+﻿# MyTickets-frontend-app
 
 ### Resume
 
