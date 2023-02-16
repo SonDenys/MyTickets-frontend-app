@@ -4,7 +4,7 @@
 
 ### Frontend Part
 This is a small ticketing app. The project is still in progress. 
-**The server is actually closed, I'll check on that**
+**The server is actually not available (error 503), I'll check on that**
 <br>
 You can visit the replica directly [here](https://denys-tickets-app.netlify.app/)
 
