@@ -3,7 +3,8 @@
 ### Resume
 
 ### Frontend Part
-This is a small ticketing app. The project is still in progress.
+This is a small ticketing app. The project is still in progress. 
+**The server is actually closed, I'll check on that**
 <br>
 You can visit the replica directly [here](https://denys-tickets-app.netlify.app/)
 
